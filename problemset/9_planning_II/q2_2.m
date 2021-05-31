@@ -20,8 +20,8 @@ HeapSize = length(BinMinHeap);
 idx = 1;
 consistent = false;
 while ~consistent
-    if HeapSize >= idx * 2 + 1 && ...   % two children
-        BinMinHeap(idx).key > min(BinMinHeap(idx * 2).key, BinMinHeap(idx * 2 + 1).key) % and parent is larger
+    if HeapSize >= idx * 2 + 1 && ...   % two children and % and parent is larger
+        BinMinHeap(idx).key > min(BinMinHeap(idx * 2).key, BinMinHeap(idx * 2 + 1).key)
         
         % swap with min child
         temp = BinMinHeap(idx);
@@ -40,7 +40,7 @@ while ~consistent
             idx = idx * 2;
         end
         
-    elseif HeapSize == idx * 2 ... % one child
+    elseif HeapSize == idx * 2 &&... % one child
             BinMinHeap(idx).key > BinMinHeap(idx * 2).key % and parent is larger
             
         % swap with child
@@ -55,5 +55,4 @@ while ~consistent
     end
 end
 
-
-      
+BinMinHeap.key

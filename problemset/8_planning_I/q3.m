@@ -24,35 +24,35 @@ iter = 1;
 prevSolution = inf(size(Map));
 
 while iter < maxIter && max(abs(prevSolution(:) - SearchSolution(:))) > tol
-    
-    % solution of prev iteration 
+
+    % solution of prev iteration
     prevSolution = SearchSolution;
-    
-    % for (x, y) 
+
+    % for (x, y)
     x_bound = size(prevSolution, 1);
     y_bound = size(prevSolution, 2);
-    
+
     % assume boundary of space is obstacles
     for x = 1:x_bound
         for y = 1:y_bound
-           
+
             if prevSolution(x, y) == 1 || prevSolution(x, y) == 0
                 % do not update goal or obstacles
                 SearchSolution(x, y) = prevSolution(x, y);
-                
+
                 continue;
             end
-            
+
             % update other cells (mean value of neighbors)
             U_q = prevSolution(x-1, y) + prevSolution(x+1, y) + ...
                 prevSolution(x, y-1) + prevSolution(x, y+1);
-            
+
             U_q = U_q / 4;
-            
+
             SearchSolution(x, y) = U_q;
         end
     end
-        
+
     % update iteration counter
     iter = iter + 1;
 end
@@ -60,3 +60,13 @@ end
 % visualize the solution
 imagesc(SearchSolution)
 set(gca,'dataAspectRatio',[1 1 1])
+
+
+
+
+
+
+
+
+
+

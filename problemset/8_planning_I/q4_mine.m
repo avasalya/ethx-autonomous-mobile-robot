@@ -40,42 +40,40 @@ while maxChange > tol
 end
 
 
-
-
-
-% extract solution path from start to goal
 robotPos = SearchStart;
-
-% init
-OptimalPath = robotPos;
-
-% map size
-map_width = size(Map, 1);
-map_height = size(Map, 2);
-
+optimalPath = robotPos;
+                
 while ~isequal(robotPos, SearchGoal)
 
-    x_range = max(robotPos(1)-1, 1):min(robotPos(1)+1, map_width);
-    y_range = max(robotPos(2)-1, 1):min(robotPos(2)+1, map_height);
-
+    % make sure we dont exceed the boundary of the map
+    x_range = max(robotPos(1)-1, 1):min(robotPos(1)+1, size(Map,1));
+    y_range = max(robotPos(2)-1, 1):min(robotPos(2)+1, size(Map,2));   
+     
     % minimum U among neighborign cells
     Umin = inf;
-
+    
     % search steepest gradient
     for x = x_range
         for y = y_range
-
-            if Umin > SearchSolution(x, y)
-                % update minimum U and move robot
-                Umin = SearchSolution(x, y);
-                robotPos = [x, y];
+        
+            if Umin > SearchSolution(x,y)
+                % update Umin
+                Umin = SearchSolution(x,y)
+                % move robot
+                robotPos = [x,y];
             end
         end
     end
+    
+    optimalPath = [optimalPath; robotPos];
+    
 
-    OptimalPath = [OptimalPath; robotPos];
 end
 
+
+figure(3)
+imagesc(SearchSolution)
+set(gca, 'dataAspectRatio', [1 1 1])
 
 % display the solution
 disp(OptimalPath)

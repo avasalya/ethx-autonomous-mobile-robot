@@ -22,19 +22,19 @@ BinMinHeap(1).key = BinMinHeap(1).g + BinMinHeap(1).h;
 
 % iteratively expand states
 goalReached = false;
+
 while ~isempty(BinMinHeap) && ~goalReached
     % extract top element from heap (reuse your code from before) and
     % make it consistent again
     [CurrState, BinMinHeap] = HeapPop(BinMinHeap);
-    
+
     % store the g value (cost so far) of the state in the solution map,
     % but only if this position has not been expanded before already!
     if ~isinf(SolutionMap(CurrState.pos(1), CurrState.pos(2)))
-        % if it's not inf (init value), it already traveled
-        continue;
+    	continue; % if not infinite then already traveled
     end
-    
     SolutionMap(CurrState.pos(1),CurrState.pos(2)) = CurrState.g;
+
     
     % terminate search in case currState is the goal
     if CurrState.pos == SearchGoal
@@ -47,30 +47,34 @@ while ~isempty(BinMinHeap) && ~goalReached
     % neighbors incurs a cost of sqrt(2). Insert them into the heap
     % if the corresponding cell is not occupied and ensure that the
     % heap becomes consistent again
-    x_range = max(CurrState.pos(1) - 1, 1):min(CurrState.pos(1)+1, size(Map, 1));
-    y_range = max(CurrState.pos(2) - 1, 1):min(CurrState.pos(2)+1, size(Map, 2));
+    x_range = max(CurrState.pos(1)-1, 1): min(CurrState.pos(1)+1, size(Map,1));
+    y_range = max(CurrState.pos(2)-1, 1): min(CurrState.pos(2)+1, size(Map,2));
+    
     
     for x = x_range
+    
         for y = y_range
             
-            if Map(x, y) == -1 
+            if Map(x,y) == -1
                 continue;
             end
             
-            new.pos = [x, y];
-            new.g   = CurrState.g + norm([x, y]-CurrState.pos);
-            new.h   = norm(SearchGoal-[x, y]);
+            new.pos = [x,y];
+            new.g = CurrState.g + norm([x,y] - CurrState.pos);
+            new.h = norm(SearchGoal - [x,y]);
             new.key = new.g + new.h;
-
+            
             BinMinHeap = HeapPush(new, BinMinHeap);
         end
+        
     end
-    
+   
 end
-
+        
 % visualize the solution map (g values)
 imagesc(SolutionMap)
 set(gca,'dataAspectRatio',[1 1 1])
+
 
 
 %% SUBFUNCTIONS
